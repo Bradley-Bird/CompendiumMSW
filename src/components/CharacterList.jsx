@@ -16,7 +16,7 @@ function CharacterList({ character: { name, films } }) {
 
   return (
     <>
-      <p>{movies.title}</p>
+      {/* <p>{movies.title}</p> */}
       <p>{name}</p>
     </>
   );

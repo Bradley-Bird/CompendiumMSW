@@ -7,6 +7,7 @@ function Main() {
   const [characters, setCharacters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
+  const [title, setTitle] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchCharacters();
@@ -17,15 +18,21 @@ function Main() {
     fetchData();
   }, []);
   useEffect(() => {
-    characters.map((character) => {
+    characters.map(async (character) => {
       const fetchData = async () => {
         const data = await fetchFilm(character.films);
-        setMovies(data);
+        setMovies((prev) => [...prev, data.title]);
+        console.log('data', data.title);
       };
-      fetchData();
+      await fetchData();
     });
   }, [characters]);
+  useEffect(() => {
+    const titles = [new Set(movies.map((movie) => movie))];
+    setTitle(titles);
+  }, [movies]);
 
+  console.log('movies', movies);
   return (
     <div>
       {loading ? (
