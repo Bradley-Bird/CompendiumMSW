@@ -28,15 +28,23 @@ function Main() {
   //maps through characters, grabs nested 'films' endpoint, then fetches film title and sets movies array with film titles
   useEffect(() => {
     characters.map(async (character) => {
-      const fetchData = async () => {
-        const data = await fetchFilm(character.films);
-        setTempMovies((prev) => [...prev, data]);
-      };
-      fetchData().then(
-        () => tempMovies.length && console.log('temp', tempMovies)
-      );
+      await fetchFilm(character.films).then((data) => {
+        return setTempMovies((tempMovies) => {
+          return [
+            ...tempMovies.slice(0, 1),
+            { id: data.id, title: data.title },
+            ...tempMovies.slice(1),
+          ];
+        });
+      });
     });
+
+    setMovies(tempMovies);
   }, [characters]);
+
+  useEffect(() => {
+    setMovies(tempMovies);
+  }, [tempMovies]);
 
   //waits for movies to be updated with film titles. then makes new array with-
   //only once instance of each film title.
@@ -49,7 +57,7 @@ function Main() {
       ...new Map(titles.map((item) => [item['id'], item])).values(),
     ];
 
-    console.log('asjikhda', uniqueIds);
+    setTitle(uniqueIds);
     // console.log('titles', titles);
   }, [movies]);
 
@@ -62,7 +70,8 @@ function Main() {
   return (
     <>
       <select onChange={handleClick}>
-        {title.length && title.map((t) => <option key={t}>{t}</option>)}
+        {title.length &&
+          title.map((t) => <option key={t.id}>{t.title}</option>)}
       </select>
       <div>
         {loading ? (
