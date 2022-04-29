@@ -3,10 +3,6 @@ import { useEffect, useState } from 'react';
 import CharacterList from '../components/CharacterList';
 import { fetchCharacters, fetchFilm } from '../services/ghibli';
 
-async function getMovies() {
-  const data = await fetchFilm(character.films);
-  return data;
-}
 function Main() {
   const [characters, setCharacters] = useState([]);
   const [loading, setLoading] = useState(true);

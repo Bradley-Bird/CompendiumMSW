@@ -1,4 +1,5 @@
-import { setupServer } from 'mws/node';
+import { setupServer } from 'msw/node';
+
 import { rest } from 'msw';
 import characters from './fixtures/characters';
 global.fetch = (...args) =>

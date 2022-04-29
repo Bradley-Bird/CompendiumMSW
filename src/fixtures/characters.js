@@ -1,4 +1,4 @@
-export default characters = [
+const characters = [
   {
     id: '267649ac-fb1b-11eb-9a03-0242ac130003',
     name: 'Haku',
@@ -799,3 +799,4 @@ export default characters = [
     url: 'https://ghibliapi.herokuapp.com/people/835f8c7c-2fc6-4f54-b545-c02ab066cd69',
   },
 ];
+export default characters;
