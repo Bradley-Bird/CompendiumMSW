@@ -19,24 +19,23 @@ function Main() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchCharacters();
-      console.log(data);
       setCharacters(data);
       setLoading(false);
     };
     fetchData();
   }, []);
+
   //maps through characters, grabs nested 'films' endpoint, then fetches film title and sets movies array with film titles
   useEffect(() => {
     characters.map(async (character) => {
       const fetchData = async () => {
         const data = await fetchFilm(character.films);
-
         setTempMovies((prev) => [...prev, data]);
       };
-      await fetchData();
+      fetchData().then(
+        () => tempMovies.length && console.log('temp', tempMovies)
+      );
     });
-    setMovies(tempMovies);
-    console.log(tempMovies);
   }, [characters]);
 
   //waits for movies to be updated with film titles. then makes new array with-
