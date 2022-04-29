@@ -12,8 +12,11 @@ function Main() {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const [title, setTitle] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState('');
+  const [selectedMovie, setSelectedMovie] = useState('1');
   const [tempMovies, setTempMovies] = useState([]);
+  const [filteredCharacters, setFilteredCharacters] = useState([]);
+  const isFiltered = selectedMovie !== '1';
+  const current = isFiltered ? filteredCharacters : characters;
 
   //populates characters
   useEffect(() => {
@@ -38,8 +41,6 @@ function Main() {
         });
       });
     });
-
-    setMovies(tempMovies);
   }, [characters]);
 
   useEffect(() => {
@@ -54,30 +55,47 @@ function Main() {
       title: movie.title,
     }));
     const uniqueIds = [
+      { id: 1, title: 'All' },
       ...new Map(titles.map((item) => [item['id'], item])).values(),
     ];
-
     setTitle(uniqueIds);
-    // console.log('titles', titles);
   }, [movies]);
 
   //on change fetch movies, fetch characters in particular movie, then display characters on page.
   //handleClick for setting state
-  const handleClick = (e) => {
-    setSelectedMovie(e.target.value);
-  };
+  useEffect(() => {
+    const getChar = () => {
+      // filtering characters based on films
+      const filterChar = characters.filter(
+        (character) =>
+          character.films[0] ===
+          `https://ghibliapi.herokuapp.com/films/${selectedMovie}`
+      );
+      setFilteredCharacters(filterChar);
+    };
+    getChar();
+  }, [selectedMovie]);
+
   // console.log('movies', movies);
   return (
     <>
-      <select onChange={handleClick}>
+      <select
+        onChange={(e) => {
+          setSelectedMovie(e.target.value);
+        }}
+      >
         {title.length &&
-          title.map((t) => <option key={t.id}>{t.title}</option>)}
+          title.map((t) => (
+            <option value={t.id} key={t.id}>
+              {t.title}
+            </option>
+          ))}
       </select>
       <div>
         {loading ? (
           <p>loading...</p>
         ) : (
-          characters.map((character) => (
+          current.map((character) => (
             <CharacterList key={character.name} {...{ character }} />
           ))
         )}
