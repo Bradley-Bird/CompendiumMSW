@@ -16,6 +16,8 @@ describe('main', () => {
       await screen.findByRole('combobox'),
       await screen.findByRole('option', { name: 'Spirited Away' })
     );
+    await screen.findByText('Haku');
+    screen.debug();
     expect(screen.getByRole('option', { name: 'Spirited Away' }).selected).toBe(
       true
     );
